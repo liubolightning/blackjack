@@ -5,7 +5,23 @@ class window.Hand extends Backbone.Collection
   initialize: (array, @deck, @isDealer) ->
 
   hit: ->
-    @add(@deck.pop()).last()
+    if not @isDealer
+      console.log("@get('deck') is " + @get('deck'))
+      @add(@deck.pop()).last()
+    else
+      # console.log("@deck is ")
+      # @add(@deck.pop()).last() while @scores()[0] < 17
+      @at(0).flip()
+      if(@scores()[0] >= 17)
+        @stand()
+      while(@scores()[0] < 17)
+        @add(@deck.pop()).last()
+
+  lose: ->
+    @trigger('lose')
+
+  stand: ->
+    @trigger('stand')
 
   scores: ->
     # The scores are an array of potential scores.
